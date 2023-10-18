@@ -1,10 +1,14 @@
 using System.Drawing;
 using System.Text.RegularExpressions;
+using MySql.Data.MySqlClient;
 
 namespace _30LIDTS_RicardoCruz_05
 {
     public partial class Form1 : Form
     {
+        //Datos de conexion a Mysql
+        //string conexionSQL = 
+        // Metodo para insertar registros
         public Form1()
         {
             InitializeComponent();
@@ -14,6 +18,15 @@ namespace _30LIDTS_RicardoCruz_05
             tb_Telefono.TextChanged += ValidarTelefono;
             tb_Nombre.TextChanged += ValidarNombre;
             tb_Apellido.TextChanged += ValidarApellidos;
+        }
+        public void ValidarEdad(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (!EsEnteroValido(textbox.Text))
+            {
+                MessageBox.Show("Por favor, ingrese una edad válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -43,33 +56,41 @@ namespace _30LIDTS_RicardoCruz_05
                 genero = "Mujer";
             }
             //Validar que los campos tengan el formato corrdcto
-            if (EsEnteroValido(edad) && EsDecimalValido(estatura) && EsEnteroValidoDe10Digitos(telefono) && EsTextoValido(nombres) && EsTextoValido(apellidos))
+            if (EsEnteroValido(edad) && EsDecimalValido(estatura) && EsTextoValido(nombres) && EsTextoValido(apellidos))
             {
-                //Crear cadena con los datos 
-
-                string datos = $"Nombres: {nombres}\r\n Apellidos:{apellidos} \r\n Telefono:{telefono} \r\n Estatura:{estatura} \r\n Edad :{edad}\r\n Genero:{genero}";
-                //Guardar los datos en un archivo de texto
-                string rutaArchivo = "C:/Users/ricar/Documents/datos.txt";
-                bool archivoExiste = File.Exists(rutaArchivo);
-                if (archivoExiste == false) 
+                
+                if ( telefono.Length == 10 && EsEnteroValidoDe10Digitos(telefono))
                 {
+                    //Crear cadena con los datos 
+                    string datos = $"Nombres: {nombres}\r\n Apellidos:{apellidos} \r\n Telefono:{telefono} \r\n Estatura:{estatura} \r\n Edad :{edad}\r\n Genero:{genero}";
+                     //Guardar los datos en un archivo de texto
+                    string rutaArchivo = "C:/Users/ricar/Documents/datos.txt";
+                    bool archivoExiste = File.Exists(rutaArchivo);
+                    if (archivoExiste == false) 
+                    {
                     File.WriteAllText(rutaArchivo, datos);
+                    }
+                    else
+                    {
+                       using (StreamWriter write = new StreamWriter(rutaArchivo, true))
+                       {
+                         if (archivoExiste)
+                         {
+                            //Si el archivo existe, añadir un separador antes del nuevo registro
+                            write.WriteLine();
+                         }
+                          write.WriteLine(datos);
+                       }
+
+                    }
+                    //Mensaje de que los datos fueron capturados
+                    MessageBox.Show("Datos guardados con exito:\n\n" + datos, "información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    using (StreamWriter write = new StreamWriter(rutaArchivo, true))
-                    {
-                        if (archivoExiste)
-                        {
-                            //Si el archivo existe, añadir un separador antes del nuevo registro
-                            write.WriteLine();
-                        }
-                        write.WriteLine(datos);
-                    }
-
+                    MessageBox.Show("Ingrese un telefono valido de 10 digitos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                //Mensaje de que los datos fueron capturados
-                MessageBox.Show("Datos guardados con exito:\n\n" + datos, "información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
 
             }
             else
@@ -99,15 +120,7 @@ namespace _30LIDTS_RicardoCruz_05
             return Regex.IsMatch(valor, @"^[a-zA-Z\s]+$");                                                                                                                                                                             
         }
 
-        public void ValidarEdad(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            if (!EsEnteroValido(textbox.Text))
-            {
-                MessageBox.Show("Por favor, ingrese una edad válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-            }
-        }
+
 
         public void ValidarEstatura(object sender, EventArgs e)
         {
