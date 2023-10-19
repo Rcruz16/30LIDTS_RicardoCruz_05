@@ -60,6 +60,93 @@ namespace _30LIDTS_RicardoCruz_05
                 conection.Close();
             }
         }
+        private bool EsEnteroValido(string valor)
+        {
+            int resultado;
+            return int.TryParse(valor, out resultado);
+        }
+        private bool EsDecimalValido(string valor)
+        {
+            decimal resultado;
+            return decimal.TryParse(valor, out resultado);
+        }
+        private bool EsEnteroValidoDe10Digitos(string input)
+        {
+            if (input.Length != 10)
+            {
+                return false;
+            }
+            if (!input.All(char.IsDigit))
+            {
+                return false;
+            }
+            return true;
+
+        }
+        private bool EsTextoValido(string valor)
+        {
+            return Regex.IsMatch(valor, @"^[a-zA-Z\s]+$");
+        }
+        public void ValidarEdad(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (!EsEnteroValido(textbox.Text))
+            {
+                MessageBox.Show("Por favor, ingrese una edad válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+            }
+        }
+
+        public void ValidarEstatura(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (!EsDecimalValido(textbox.Text))
+            {
+                MessageBox.Show("Por favor, ingrese una Estatura Válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+
+            }
+        }
+
+        public void ValidarTelefono(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            string input = textbox.Text;
+            if (input.Length < 10)
+            {
+                return;
+            }
+            else if (!EsEnteroValidoDe10Digitos(input))
+            {
+                MessageBox.Show("Por favor, ingrese una numero de telefono válido de 10 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+
+            }
+        }
+
+        public void ValidarNombre(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (!EsTextoValido(textbox.Text))
+            {
+                MessageBox.Show("Por favor, ingrese una Nombre Válida (Solo letras y espacios).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+
+            }
+
+        }
+
+        public void ValidarApellidos(object sender, EventArgs e)
+        {
+            TextBox textbox = (TextBox)sender;
+            if (!EsTextoValido(textbox.Text))
+            {
+                MessageBox.Show("Por favor, ingrese una Apellido Válida ( Solo letras y espacios ).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textbox.Clear();
+
+            }
+
+        }
         private void btn_Guardar_Click(object sender, EventArgs e)
         {
             string nombres = tb_Nombre.Text;
@@ -131,93 +218,7 @@ namespace _30LIDTS_RicardoCruz_05
             }
         }
 
-        private bool EsEnteroValido(string valor)
-        {
-            int resultado;
-            return int.TryParse(valor, out resultado);
-        }
-        private bool EsDecimalValido(string valor)
-        {
-            decimal resultado;
-            return decimal.TryParse(valor, out resultado);
-        }
-        private bool EsEnteroValidoDe10Digitos(string input)
-        {
-            if(input.Length!=10)
-            {
-                return false;
-            }
-            if (!input.All(char.IsDigit))
-            {
-                return false;
-            }
-            return false;
-
-        }
-        private bool EsTextoValido(string valor)
-        {
-            return Regex.IsMatch(valor, @"^[a-zA-Z\s]+$");                                                                                                                                                                             
-        }
-        public void ValidarEdad(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            if (!EsEnteroValido(textbox.Text))
-            {
-                MessageBox.Show("Por favor, ingrese una edad válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-            }
-        }
-
-        public void ValidarEstatura(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            if (!EsDecimalValido(textbox.Text))
-            {
-                MessageBox.Show("Por favor, ingrese una Estatura Válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-
-            }
-        }
-
-        public void ValidarTelefono(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            string input = textbox.Text;
-            if (input.Length < 10) 
-            {
-                return;
-            }
-            else if (!EsEnteroValidoDe10Digitos(input))
-            {
-                MessageBox.Show("Por favor, ingrese una numero de telefono válido de 10 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-
-            }
-        }
-
-        public void ValidarNombre(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            if (!EsTextoValido(textbox.Text))
-            {
-                MessageBox.Show("Por favor, ingrese una Nombre Válida (Solo letras y espacios).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-
-            }
-
-        }
-
-        public void ValidarApellidos(object sender, EventArgs e)
-        {
-            TextBox textbox = (TextBox)sender;
-            if (!EsTextoValido(textbox.Text))
-            {
-                MessageBox.Show("Por favor, ingrese una Apellido Válida ( Solo letras y espacios ).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textbox.Clear();
-
-            }
-
-        }
+       
 
         private void btn_Cancelar_Click(object sender, EventArgs e)
         {
